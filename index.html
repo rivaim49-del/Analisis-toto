@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulator Analisis Angka</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #111827;
+    color: #fff;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 15px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: #1f2937;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.25);
+}
+
+label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: #374151;
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.btn-main {
+    background: #2563eb;
+    color: white;
+    width: 100%;
+}
+
+.btn-add {
+    background: #059669;
+    color: white;
+}
+
+.btn-reset {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-copy {
+    background: #7c3aed;
+    color: white;
+}
+
+.history {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.history span {
+    background: #374151;
+    padding: 7px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.result-box {
+    background: #111827;
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid #374151;
+}
+
+.result-box h3 {
+    margin: 0 0 10px;
+    font-size: 17px;
+    color: #60a5fa;
+}
+
+.number {
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: 4px;
+    color: #facc15;
+    word-break: break-all;
+}
+
+.small-number {
+    font-size: 21px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 9px;
+    border-bottom: 1px solid #374151;
+    text-align: center;
+}
+
+th {
+    color: #60a5fa;
+}
+
+.note {
+    color: #9ca3af;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+@media(max-width:600px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>SIMULATOR ANALISIS ANGKA</h1>
+<div class="subtitle">
+ML • MISTIK BARU • INDEX • TYSEN • MISTIK 0 • MISTIK 9
+</div>
+
+<div class="card">
+
+<label>Masukkan Result Sebelumnya</label>
+
+<input
+    id="resultInput"
+    type="text"
+    inputmode="numeric"
+    maxlength="4"
+    placeholder="Contoh: 1234"
+>
+
+<button class="btn-add" onclick="tambahResult()">
+    + Tambah Result
+</button>
+
+<button class="btn-reset" onclick="resetData()">
+    Reset
+</button>
+
+<div class="history" id="history"></div>
+
+</div>
+
+
+<div class="card">
+
+<button class="btn-main" onclick="hitung()">
+    ANALISIS / HITUNG
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h2>HASIL RUMUS</h2>
+
+<div class="grid">
+
+<div class="result-box">
+<h3>ML — Mistik Lama</h3>
+<div class="number" id="ml">-</div>
+</div>
+
+<div class="result-box">
+<h3>Mb — Mistik Baru</h3>
+<div class="number" id="mb">-</div>
+</div>
+
+<div class="result-box">
+<h3>Index</h3>
+<div class="number" id="index">-</div>
+</div>
+
+<div class="result-box">
+<h3>Ty — Tysen</h3>
+<div class="number" id="ty">-</div>
+</div>
+
+<div class="result-box">
+<h3>MO — Mistik 0</h3>
+<div class="number" id="mo">-</div>
+</div>
+
+<div class="result-box">
+<h3>M9 — Mistik 9</h3>
+<div class="number" id="m9">-</div>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>BBFS 6 DIGIT</h2>
+
+<div class="result-box">
+<div class="number" id="bbfs">-</div>
+</div>
+
+<p class="note">
+BBFS dihitung dari skor kemunculan digit dan hasil transformasi rumus.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h2>ANGKA TARUNG</h2>
+
+<div class="result-box">
+<div class="number" id="tarung">-</div>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>AS / COP / KEPALA / EKOR</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Posisi</th>
+<th>6 Digit</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+<td>AS</td>
+<td id="as">-</td>
+</tr>
+
+<tr>
+<td>COP</td>
+<td id="cop">-</td>
+</tr>
+
+<tr>
+<td>KEPALA</td>
+<td id="kepala">-</td>
+</tr>
+
+<tr>
+<td>EKOR</td>
+<td id="ekor">-</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+
+<div class="card">
+
+<button class="btn-copy" onclick="copyHasil()">
+SALIN HASIL
+</button>
+
+</div>
+
+
+<div class="card">
+
+<h3>Catatan</h3>
+
+<div class="note">
+Simulator ini hanya mengolah angka sebelumnya berdasarkan tabel
+pasangan digit yang dimasukkan dari gambar. Hasil bersifat
+eksperimental/statistik dan tidak dapat memastikan hasil undian.
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   TABEL RUMUS SESUAI GAMBAR
+   Setiap pasangan dibuat dua arah.
+========================================================= */
+
+const RUMUS = {
+
+    ML: [
+        ["0","1"],
+        ["2","5"],
+        ["3","8"],
+        ["4","7"],
+        ["6","9"]
+    ],
+
+    MB: [
+        ["0","8"],
+        ["2","6"],
+        ["3","9"],
+        ["4","5"],
+        ["7","1"]
+    ],
+
+    INDEX: [
+        ["0","5"],
+        ["2","7"],
+        ["3","8"],
+        ["4","9"],
+        ["1","6"]
+    ],
+
+    TY: [
+        ["0","7"],
+        ["2","9"],
+        ["3","6"],
+        ["4","1"],
+        ["5","8"]
+    ],
+
+    MO: [
+        ["0","6"],
+        ["1","5"],
+        ["2","8"],
+        ["3","7"],
+        ["4","9"]
+    ],
+
+    M9: [
+        ["0","9"],
+        ["1","8"],
+        ["2","7"],
+        ["3","6"],
+        ["4","5"]
+    ]
+
+};
+
+
+/* =========================================================
+   MEMBUAT MAP DUA ARAH
+========================================================= */
+
+function buatMap(pasangan) {
+
+    const map = {};
+
+    pasangan.forEach(pair => {
+
+        const a = pair[0];
+        const b = pair[1];
+
+        map[a] = b;
+        map[b] = a;
+
+    });
+
+    return map;
+}
+
+
+const MAP = {
+
+    ML: buatMap(RUMUS.ML),
+    MB: buatMap(RUMUS.MB),
+    INDEX: buatMap(RUMUS.INDEX),
+    TY: buatMap(RUMUS.TY),
+    MO: buatMap(RUMUS.MO),
+    M9: buatMap(RUMUS.M9)
+
+};
+
+
+/* =========================================================
+   DATA RESULT
+========================================================= */
+
+let historyData = [];
+
+
+/* =========================================================
+   TAMBAH RESULT
+========================================================= */
+
+function tambahResult() {
+
+    const input = document.getElementById("resultInput");
+
+    let angka = input.value.replace(/\D/g, "");
+
+    if (angka.length !== 4) {
+        alert("Masukkan result 4 digit.");
+        return;
+    }
+
+    historyData.push(angka);
+
+    input.value = "";
+
+    tampilHistory();
+
+    hitung();
+}
+
+
+/* =========================================================
+   TAMPIL HISTORY
+========================================================= */
+
+function tampilHistory() {
+
+    const box = document.getElementById("history");
+
+    box.innerHTML = "";
+
+    historyData.forEach((item, index) => {
+
+        const span = document.createElement("span");
+
+        span.innerHTML =
+            "#" + (index + 1) + " " + item;
+
+        box.appendChild(span);
+
+    });
+
+}
+
+
+/* =========================================================
+   TRANSFORMASI DIGIT
+========================================================= */
+
+function transformDigit(digit, jenis) {
+
+    return MAP[jenis][digit] ?? digit;
+
+}
+
+
+function transformNumber(number, jenis) {
+
+    return number
+        .split("")
+        .map(d => transformDigit(d, jenis))
+        .join("");
+
+}
+
+
+/* =========================================================
+   FREKUENSI DIGIT
+========================================================= */
+
+function hitungFrekuensi() {
+
+    const freq = {};
+
+    for (let i = 0; i <= 9; i++) {
+        freq[i] = 0;
+    }
+
+    historyData.forEach(result => {
+
+        result.split("").forEach(digit => {
+
+            freq[digit]++;
+
+        });
+
+    });
+
+    return freq;
+
+}
+
+
+/* =========================================================
+   SKOR DIGIT
+========================================================= */
+
+function hitungSkor() {
+
+    const freq = hitungFrekuensi();
+
+    const skor = {};
+
+    for (let i = 0; i <= 9; i++) {
+
+        skor[i] = freq[i];
+
+    }
+
+
+    /*
+       Tambahkan kontribusi dari semua rumus.
+    */
+
+    const jenisList = [
+        "ML",
+        "MB",
+        "INDEX",
+        "TY",
+        "MO",
+        "M9"
+    ];
+
+
+    historyData.forEach(result => {
+
+        jenisList.forEach(jenis => {
+
+            const hasil = transformNumber(
+                result,
+                jenis
+            );
+
+            hasil.split("").forEach(digit => {
+
+                skor[digit] += 1;
+
+            });
+
+        });
+
+    });
+
+
+    return skor;
+
+}
+
+
+/* =========================================================
+   SORT DIGIT BERDASARKAN SKOR
+========================================================= */
+
+function rankingDigit() {
+
+    const skor = hitungSkor();
+
+    return Object.keys(skor)
+        .sort((a,b) => {
+
+            if (skor[b] !== skor[a]) {
+                return skor[b] - skor[a];
+            }
+
+            return Number(a) - Number(b);
+
+        });
+
+}
+
+
+/* =========================================================
+   BBFS 6 DIGIT
+========================================================= */
+
+function buatBBFS() {
+
+    const ranking = rankingDigit();
+
+    return ranking
+        .slice(0,6)
+        .join("");
+
+}
+
+
+/* =========================================================
+   ANGKA TARUNG
+=========================================================
+
+   Mengambil pasangan dari digit BBFS menggunakan
+   gabungan semua rumus.
+========================================================= */
+
+function buatTarung() {
+
+    const bbfs = buatBBFS();
+
+    const hasil = [];
+
+    const jenisList = [
+        "ML",
+        "MB",
+        "INDEX",
+        "TY",
+        "MO",
+        "M9"
+    ];
+
+
+    for (const digit of bbfs) {
+
+        for (const jenis of jenisList) {
+
+            const pasangan =
+                transformDigit(digit, jenis);
+
+            if (!hasil.includes(pasangan)) {
+
+                hasil.push(pasangan);
+
+            }
+
+            if (hasil.length >= 6) {
+                break;
+            }
+
+        }
+
+        if (hasil.length >= 6) {
+            break;
+        }
+
+    }
+
+
+    return hasil.slice(0,6).join("");
+
+}
+
+
+/* =========================================================
+   POSISI AS / COP / KEPALA / EKOR
+========================================================= */
+
+function posisiDigit(posisi) {
+
+    if (historyData.length === 0) {
+        return [];
+    }
+
+    const skor = {};
+
+
+    for (let i = 0; i <= 9; i++) {
+        skor[i] = 0;
+    }
+
+
+    historyData.forEach(result => {
+
+        let digit = result[posisi];
+
+        if (digit !== undefined) {
+            skor[digit]++;
+        }
+
+
+        /*
+           Tambahkan hasil transformasi posisi.
+        */
+
+        Object.keys(MAP).forEach(jenis => {
+
+            const hasil =
+                transformDigit(digit, jenis);
+
+            skor[hasil] += 1;
+
+        });
+
+    });
+
+
+    return Object.keys(skor)
+        .sort((a,b) => {
+
+            if (skor[b] !== skor[a]) {
+                return skor[b] - skor[a];
+            }
+
+            return Number(a) - Number(b);
+
+        })
+        .slice(0,6);
+
+}
+
+
+/* =========================================================
+   ANALISIS RUMUS
+========================================================= */
+
+function hitung() {
+
+    if (historyData.length === 0) {
+
+        alert("Masukkan minimal 1 result.");
+
+        return;
+
+    }
+
+
+    const terakhir =
+        historyData[historyData.length - 1];
+
+
+    /*
+       Rumus utama berdasarkan result terakhir
+    */
+
+    document.getElementById("ml").textContent =
+        transformNumber(terakhir, "ML");
+
+    document.getElementById("mb").textContent =
+        transformNumber(terakhir, "MB");
+
+    document.getElementById("index").textContent =
+        transformNumber(terakhir, "INDEX");
+
+    document.getElementById("ty").textContent =
+        transformNumber(terakhir, "TY");
+
+    document.getElementById("mo").textContent =
+        transformNumber(terakhir, "MO");
+
+    document.getElementById("m9").textContent =
+        transformNumber(terakhir, "M9");
+
+
+    /*
+       BBFS
+    */
+
+    document.getElementById("bbfs").textContent =
+        buatBBFS();
+
+
+    /*
+       Tarung
+    */
+
+    document.getElementById("tarung").textContent =
+        buatTarung();
+
+
+    /*
+       AS
+       Posisi 0
+    */
+
+    document.getElementById("as").textContent =
+        posisiDigit(0).join("");
+
+
+    /*
+       COP
+       Posisi 1
+    */
+
+    document.getElementById("cop").textContent =
+        posisiDigit(1).join("");
+
+
+    /*
+       KEPALA
+       Posisi 2
+    */
+
+    document.getElementById("kepala").textContent =
+        posisiDigit(2).join("");
+
+
+    /*
+       EKOR
+       Posisi 3
+    */
+
+    document.getElementById("ekor").textContent =
+        posisiDigit(3).join("");
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetData() {
+
+    if (!confirm("Hapus semua result?")) {
+        return;
+    }
+
+    historyData = [];
+
+    tampilHistory();
+
+    const ids = [
+        "ml",
+        "mb",
+        "index",
+        "ty",
+        "mo",
+        "m9",
+        "bbfs",
+        "tarung",
+        "as",
+        "cop",
+        "kepala",
+        "ekor"
+    ];
+
+    ids.forEach(id => {
+
+        document.getElementById(id).textContent = "-";
+
+    });
+
+}
+
+
+/* =========================================================
+   COPY HASIL
+========================================================= */
+
+function copyHasil() {
+
+    const teks = `
+
+HASIL ANALISIS
+
+ML       : ${document.getElementById("ml").textContent}
+Mistik Baru : ${document.getElementById("mb").textContent}
+INDEX    : ${document.getElementById("index").textContent}
+TYSEN    : ${document.getElementById("ty").textContent}
+MISTIK 0 : ${document.getElementById("mo").textContent}
+MISTIK 9 : ${document.getElementById("m9").textContent}
+
+BBFS 6D  : ${document.getElementById("bbfs").textContent}
+
+TARUNG   : ${document.getElementById("tarung").textContent}
+
+AS       : ${document.getElementById("as").textContent}
+COP      : ${document.getElementById("cop").textContent}
+KEPALA   : ${document.getElementById("kepala").textContent}
+EKOR     : ${document.getElementById("ekor").textContent}
+
+`;
+
+    navigator.clipboard.writeText(teks)
+        .then(() => {
+            alert("Hasil berhasil disalin.");
+        })
+        .catch(() => {
+            alert("Gagal menyalin hasil.");
+        });
+
+}
+
+</script>
+
+</body>
+</html>
